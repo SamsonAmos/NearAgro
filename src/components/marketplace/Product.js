@@ -2,15 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import { utils } from "near-api-js";
 import { Card, Button, Col, Badge, Stack } from "react-bootstrap";
-import {Link, useNavigate} from "react-router-dom"
+import {useNavigate} from "react-router-dom"
 
 const Product = ({ product, buy }) => {
-  const { id, price, name, description, sold, location, image, owner } =
+  const { id, price, name, sold, image, owner } =
     product;
 
-  const triggerBuy = () => {
-    buy(id, price);
-  };
 
   const navigate = useNavigate()
 

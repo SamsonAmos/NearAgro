@@ -8,7 +8,7 @@ import ViewProductById from "./components/marketplace/ViewProductById";
 import ViewCreatedProduct from "./components/marketplace/ViewCreatedProduct";
 import Cover from "./components/utils/Cover";
 import coverImg from "./assets/img/images.jpeg";
-import { Routes, Route, Router, useNavigate  } from "react-router-dom";
+import { Routes, Route, useNavigate  } from "react-router-dom";
 import "./App.css";
 
 const App = function AppWrapper() {

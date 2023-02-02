@@ -31,12 +31,16 @@ const getProduct = useCallback(async () => {
   }, [id]);
 
 const buy = async (id, price) => {
+    toast(<NotificationSuccess text="Processing your request..." />);
     try {
       await buyProduct({
         id,
         price,
-      }).then((resp) => getProduct(id));
-      toast(<NotificationSuccess text="Product bought successfully" />);
+      }).then((resp) => {
+       getProduct(id)
+       toast(<NotificationSuccess text="Product bought successfully" />);
+     })
+      
     } catch (error) {
       toast(<NotificationError text="Failed to purchase product." />);
     } finally {

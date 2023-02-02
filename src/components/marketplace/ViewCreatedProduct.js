@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Card, Button, Col, Badge, Stack, Row,  Form, FloatingLabel, Modal } from "react-bootstrap";
+import { Card, Button, Col, Badge, Row,  Form, FloatingLabel, Modal, Container } from "react-bootstrap";
 import { utils } from "near-api-js";
-import {useNavigate,Link} from "react-router-dom"
+import {useNavigate} from "react-router-dom"
 import { toast } from "react-toastify";
-import UpdateProductModal from "./UpdateProductModal"
+import Loader from "../utils/Loader";
 import { NotificationSuccess, NotificationError } from "../utils/Notifications";
-
 import {
-   getProducts as getProductList, buyProduct, deleteProduct as deleteTask,getProduct as getTask, updateProduct
+   getProducts as getProductList, deleteProduct as deleteProductById,
+    getProduct as getProductById, updateProduct as updateProductById
 } from "../../utils/marketplace";
 
 
@@ -16,38 +16,39 @@ const ViewCreatedProducts = ({accountId}) => {
 const navigate = useNavigate()
 const [show, setShow] = useState(false);
 const [products, setProducts] = useState([]);
-const [product, setProduct] = useState({});
 const [loading, setLoading] = useState(false);
 const [name, setName] = useState("");
 const [image, setImage] = useState("");
 const [description, setDescription] = useState("");
 const [location, setLocation] = useState("");
-const [price, setPrice] = useState(product.price);
+const [price, setPrice] = useState(0);
 const isFormFilled = () => name && image && description && location && price;
 const handleClose = () => setShow(false);
 const handleShow = () => setShow(true); 
   
 const getProducts = useCallback(async () => {
+  let _products = []
     try {
       setLoading(true);
-      setProducts(await getProductList());
+      _products =  await getProductList()
+      setProducts(_products.filter(item => item.owner === accountId))
     } catch (error) {
       console.log({ error });
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [accountId]);
 
 
 const getProduct = useCallback(async (id) => {
     try {
       // setLoading(true);
-      let product1 = await getTask(id)
-      setName(product1.name)
-      setImage(product1.image)
-      setDescription(product1.description)
-      setLocation(product1.location)
-      setPrice(utils.format.formatNearAmount(product1.price))
+      let product = await getProductById(id)
+      setName(product.name)
+      setImage(product.image)
+      setDescription(product.description)
+      setLocation(product.location)
+      setPrice(utils.format.formatNearAmount(product.price))
       handleShow()
        
     } catch (error) {
@@ -60,37 +61,33 @@ const getProduct = useCallback(async (id) => {
 
   const deleteProduct = async (id) => {
   try{
-    // setDisable(true)
-    toast(<NotificationError text="Failed to purchase product." />);
-    deleteTask(id)
+    toast(<NotificationSuccess text="deleting product please wait." />);
+    deleteProductById(id)
     .then((resp) => {
-    	console.log("success", resp)
-      toast(<NotificationSuccess text="delete to purchase product." />);
-      // getTaskLists()
+      getProducts()
+      toast(<NotificationSuccess text="product deleted successfully." />);
     })
   }
   catch(error) {
-   // setDisable(false)
-    toast(<NotificationError text="Failed to purchase product." />);
+    toast(<NotificationError text="Failed to delete product." />);
   }
   finally{
-    // setDisable(false)
   }
 }
 
 
-const addProduct = async (id) => {
+const updateProduct = async (id) => {
     try {
-      setLoading(true);
-      updateProduct(id, name, description, image, location, price).then((resp) => {
+      toast(<NotificationSuccess text="updating product please wait." />);
+      updateProductById(id, name, description, image, location, price).then((resp) => {
         getProducts();
+        handleClose();
       });
-      toast(<NotificationSuccess text="Product added successfully." />);
+      toast(<NotificationSuccess text="Product updated successfully." />);
     } catch (error) {
       console.log({ error });
-      toast(<NotificationError text="Failed to create a product." />);
+      toast(<NotificationError text="Failed to update  product." />);
     } finally {
-      setLoading(false);
     }
   };
 
@@ -101,28 +98,27 @@ useEffect(() => {
     getProducts();
   }, [getProducts]);
 
-console.log(accountId)
-console.log(products)
 
  return (
  	<>
+<Container>
+   <Button className="my-4 btn-secondary" size="sm" onClick={() => navigate("/")}>Back</Button>
 
-   <Button><Link to="/" className="text-white my-4">Back</Link></Button>
-   {// <UpdateProductModal show={show} product = {product} handleShow = {handleShow} handleClose ={handleClose} location1="hello"/>
- 	}
-
-            
+{!loading && products.length === 0 ? (
+  <p className="text-center font-monospace" style={{margin : "auto"}}>No product created yet.</p>
+  )
+:
+!loading && products ? (
   <Row>
   {              
   products && products
-    .filter(item => item.owner === accountId)
     .map((item, index) => (
- 	 <Col key={index} md={12}>
+ 	 <Col key={index} md={12} className="my-2">
    <Modal show={show} onHide={handleClose} centered>
         <Modal.Header closeButton>
-          <Modal.Title>New Product</Modal.Title>
+          <Modal.Title>Update Product</Modal.Title>
         </Modal.Header>
-        {JSON.stringify(product)}
+        
         <Form>
           <Modal.Body>
             <FloatingLabel
@@ -200,31 +196,34 @@ console.log(products)
           </Modal.Body>
         </Form>
         <Modal.Footer>
-          <Button variant="outline-secondary" onClick={handleClose}>
+          <Button size="sm" variant="outline-secondary" onClick={handleClose}>
             Close
           </Button>
           <Button
+          size="sm"
             variant="dark"
-            // disabled={!isFormFilled()}
-            onClick={() => addProduct(item.id)}>
-            Save product
+            disabled={!isFormFilled()}
+            onClick={() => updateProduct(item.id)}>
+            Update
           </Button>
-            }
+            
         </Modal.Footer>
       </Modal>
       <Card className=" h-100">
         <Card.Header>
-          <Stack direction="horizontal" gap={2}>
+          <div className="d-flex justify-content-between">
             <span className="font-monospace text-secondary">{item.owner}</span>
             
-            <Badge bg="success" onClick={() => getProduct(item.id)} className="ms-auto">
+            <div>
+            <Badge bg="success mx-2" style={{cursor : "pointer"}} onClick={() => getProduct(item.id)} className="ms-auto">
                Update
             </Badge>
 
-            <Badge bg="danger" onClick={() => deleteProduct(item.id)} className="ms-auto">
+            <Badge bg="danger mx-2" style={{cursor : "pointer"}} onClick={() => deleteProduct(item.id)} className="ms-auto">
                Delete
             </Badge>
-          </Stack>
+            </div>
+          </div>
         </Card.Header>
         <Card.Body className="d-flex gap-3 text-left">
         <div className="shadow">
@@ -263,7 +262,11 @@ console.log(products)
     </Col>
     
   ))}
-    </Row>
+    </Row>)
+    :(
+        <Loader />
+      )}
+    </Container>
  	</>
  	)
 }
