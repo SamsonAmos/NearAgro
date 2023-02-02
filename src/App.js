@@ -5,7 +5,8 @@ import Wallet from "./components/Wallet";
 import { Notification } from "./components/utils/Notifications";
 import Products from "./components/marketplace/Products";
 import ViewProductById from "./components/marketplace/ViewProductById";
-import ViewCreatedProduct from "./components/marketplace/ViewCreatedProduct";
+import MyProducts from "./components/marketplace/MyProducts";
+import MyCart from "./components/marketplace/MyCart";
 import Cover from "./components/utils/Cover";
 import coverImg from "./assets/img/images.jpeg";
 import { Routes, Route, useNavigate  } from "react-router-dom";
@@ -19,8 +20,7 @@ const App = function AppWrapper() {
 
   const getBalance = useCallback(async () => {
     if (account.accountId) {
-      setBalance(await accountBalance());
-      
+      setBalance(await accountBalance());    
     }
   });
 
@@ -41,10 +41,11 @@ const App = function AppWrapper() {
         <Navbar.Brand onClick={() => navigate("/")}>NearAgro</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="me-auto" onClick={() => navigate("/view_created_products")}>
-            <Nav.Link>Created Products</Nav.Link>
-            
+          <Nav className="me-auto">
+            <Nav.Link onClick={() => navigate("/view_my_products")}> MyProducts</Nav.Link> 
+            <Nav.Link onClick={() => navigate("/view_my_cart")}> MyCart</Nav.Link> 
           </Nav>
+
           <Nav>
             <Nav.Link eventKey={2}>
               <Wallet
@@ -63,7 +64,8 @@ const App = function AppWrapper() {
 <Routes>
  <Route path="/"  element={<Products />} /> 
  <Route path="/view_product_by_id/:id"  element={<ViewProductById />} /> 
- <Route path="/view_created_products"  element={<ViewCreatedProduct accountId = {account.accountId}/>} /> 
+ <Route path="/view_my_products"  element={<MyProducts accountId = {account.accountId}/>} /> 
+ <Route path="/view_my_cart"  element={<MyCart accountId = {account.accountId}/>} /> 
  </Routes>
 
 

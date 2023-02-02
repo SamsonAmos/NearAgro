@@ -12,7 +12,7 @@ import {
 
 
 
-const ViewCreatedProducts = ({accountId}) => {
+const MyProducts = ({accountId}) => {
 const navigate = useNavigate()
 const [show, setShow] = useState(false);
 const [products, setProducts] = useState([]);
@@ -271,4 +271,4 @@ useEffect(() => {
  	)
 }
 
-export default ViewCreatedProducts
+export default MyProducts
