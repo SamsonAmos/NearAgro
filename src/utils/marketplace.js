@@ -17,8 +17,9 @@ export function getProduct(id) {
   return window.contract.getProduct({id});
 }
 
-export async function buyProduct({ id, price }) {
-  await window.contract.buyProduct({ productId: id }, GAS, price);
+export async function buyProduct({ id, price, name, description, location, from, image }) {
+	const pId = uuid4();
+  await window.contract.buyProduct({ productId: id, name, description, location, from, image, pId }, GAS, price);
 }
 
 export async function deleteProduct(id) {

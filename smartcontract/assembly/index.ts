@@ -1,14 +1,8 @@
-import { Product, productsStorage } from './model';
+import { Product, productsStorage, purchasedProductsStorage, PurchasedProduct } from './model';
 import { context, ContractPromiseBatch, u128 } from "near-sdk-as";
 
-/**
- * 
- * This function changes the state of data in the blockchain. 
- * It is used to issue buy transactions when a product is purchased from a given seller (if the product is available)
- * 
- * @param productId - an identifier of a product that is the subject of purchase
- */
-export function buyProduct(productId: string): void {
+
+export function buyProduct(productId: string, name : string, description : string, location : string, from : string, image : string, pId : string): void {
     const product = getProduct(productId);
     if (product == null) {
         throw new Error("product not found");
@@ -16,14 +10,22 @@ export function buyProduct(productId: string): void {
     if (product.price.toString() != context.attachedDeposit.toString()) {
         throw new Error("attached deposit should be greater than the product's price");
     }
-    /*
-        `ContractPromiseBatch` is used here to create a transaction to transfer the money to the seller
-        The amount of money to be used in the transaction is taken from `context.attachedDeposit` 
-        which is defined by `--depositYocto=${AMOUNT}` parameter during the invocation 
-    */
+   
     ContractPromiseBatch.create(product.owner).transfer(context.attachedDeposit);
     product.incrementSoldAmount();
     productsStorage.set(product.id, product);
+
+
+    const p: PurchasedProduct = {
+        id : pId,
+        name: name,
+        description: description,
+        image : image,
+        location: location,
+        price: product.price,
+        from : from
+    };
+    purchasedProductsStorage.set(pId, PurchasedProduct.fromPayload(p));
 }
 
 /**
@@ -57,6 +59,10 @@ export function getProduct(id: string): Product | null {
  */
 export function getProducts(): Array<Product> {
     return productsStorage.values();
+}
+
+export function getPurchasedProducts(): Array<PurchasedProduct> {
+    return purchasedProductsStorage.values();
 }
 
 

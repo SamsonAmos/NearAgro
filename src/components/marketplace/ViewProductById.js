@@ -30,12 +30,12 @@ const getProduct = useCallback(async () => {
     }
   }, [id]);
 
-const buy = async (id, price) => {
+const buy = async (id, price, name, description, location, from, image) => {
     toast(<NotificationSuccess text="Processing your request..." />);
     try {
       await buyProduct({
         id,
-        price,
+        price, name, description, location, from, image
       }).then((resp) => {
        getProduct(id)
        toast(<NotificationSuccess text="Product bought successfully" />);
@@ -104,7 +104,7 @@ console.log(products)
                         
           <Button
             variant="outline-dark"
-            onClick={() => buy(products.id, products.price)}
+            onClick={() => buy(products.id, products.price, products.name, products.description, products.location, products.owner, products.image)}
             className="w-100 py-3"
           >
             Buy for {utils.format.formatNearAmount(products.price)} NEAR
