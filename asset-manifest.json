@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/NearAgro/static/css/main.a174681c.chunk.css",
+    "main.js": "/NearAgro/static/js/main.a0c8c909.chunk.js",
+    "main.js.map": "/NearAgro/static/js/main.a0c8c909.chunk.js.map",
+    "runtime-main.js": "/NearAgro/static/js/runtime-main.d7b3e98a.js",
+    "runtime-main.js.map": "/NearAgro/static/js/runtime-main.d7b3e98a.js.map",
+    "static/css/2.3b2a87e6.chunk.css": "/NearAgro/static/css/2.3b2a87e6.chunk.css",
+    "static/js/2.f9980706.chunk.js": "/NearAgro/static/js/2.f9980706.chunk.js",
+    "static/js/2.f9980706.chunk.js.map": "/NearAgro/static/js/2.f9980706.chunk.js.map",
+    "static/js/3.ae785440.chunk.js": "/NearAgro/static/js/3.ae785440.chunk.js",
+    "static/js/3.ae785440.chunk.js.map": "/NearAgro/static/js/3.ae785440.chunk.js.map",
+    "index.html": "/NearAgro/index.html",
+    "static/css/2.3b2a87e6.chunk.css.map": "/NearAgro/static/css/2.3b2a87e6.chunk.css.map",
+    "static/css/main.a174681c.chunk.css.map": "/NearAgro/static/css/main.a174681c.chunk.css.map",
+    "static/js/2.f9980706.chunk.js.LICENSE.txt": "/NearAgro/static/js/2.f9980706.chunk.js.LICENSE.txt",
+    "static/media/bootstrap-icons.css": "/NearAgro/static/media/bootstrap-icons.ea6f3dfe.woff",
+    "static/media/images.18674b3b.jpeg": "/NearAgro/static/media/images.18674b3b.jpeg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.d7b3e98a.js",
+    "static/css/2.3b2a87e6.chunk.css",
+    "static/js/2.f9980706.chunk.js",
+    "static/css/main.a174681c.chunk.css",
+    "static/js/main.a0c8c909.chunk.js"
+  ]
+}
