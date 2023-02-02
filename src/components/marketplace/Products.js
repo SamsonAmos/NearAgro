@@ -6,9 +6,9 @@ import Loader from "../utils/Loader";
 import { Row, Container } from "react-bootstrap";
 import { NotificationSuccess, NotificationError } from "../utils/Notifications";
 import {
-  getProducts as getProductList,
-  buyProduct,
-  createProduct,
+  getSeeds as getSeedList,
+  buySeed,
+  createSeed,
 } from "../../utils/marketplace";
 
 const Products = () => {
@@ -19,7 +19,7 @@ const Products = () => {
   const getProducts = useCallback(async () => {
     try {
       setLoading(true);
-      setProducts(await getProductList());
+      setProducts(await getSeedList());
     } catch (error) {
       console.log({ error });
     } finally {
@@ -30,7 +30,7 @@ const Products = () => {
   const addProduct = async (data) => {
     try {
       setLoading(true);
-      createProduct(data).then((resp) => {
+      createSeed(data).then((resp) => {
         getProducts();
       });
       toast(<NotificationSuccess text="Product added successfully." />);
@@ -45,10 +45,10 @@ const Products = () => {
   //  function to initiate transaction
   const buy = async (id, price) => {
     try {
-      await buyProduct({
+      await buySeed({
         id,
         price,
-      }).then((resp) => getProducts());
+      }).then((resp) => getSeedList());
       toast(<NotificationSuccess text="Product bought successfully" />);
     } catch (error) {
       toast(<NotificationError text="Failed to purchase product." />);

@@ -1,7 +1,13 @@
 import { PersistentUnorderedMap, context, PersistentMap, u128 } from "near-sdk-as";
 
+/**
+ * This class represents a seed that can be listed on the marketplace.
+ * It contains basic properties that are needed to define a seed.
+ * The price of the seed is of type u128 that allows storing it in yocto-NEAR, where `1 yocto = 1^-24`.
+ */
+
 @nearBindgen
-export class Product {
+export class Seed {
     id: string;
     name: string;
     description: string;
@@ -10,27 +16,35 @@ export class Product {
     price: u128;
     owner: string;
     sold: u32;
-    public static fromPayload(payload: Product): Product {
-        const product = new Product();
-        product.id = payload.id;
-        product.name = payload.name;
-        product.description = payload.description;
-        product.image = payload.image;
-        product.location = payload.location;
-        product.price = payload.price;
-        product.owner = context.sender;
-        return product;
+
+    public static fromPayload(payload: Seed): Seed {
+        const seed = new Seed();
+        seed.id = payload.id;
+        seed.name = payload.name;
+        seed.description = payload.description;
+        seed.image = payload.image;
+        seed.location = payload.location;
+        seed.price = payload.price;
+        seed.owner = context.sender;
+        return seed;
     }
     public incrementSoldAmount(): void {
         this.sold = this.sold + 1;
     }
 }
 
-export const productsStorage = new PersistentUnorderedMap<string, Product>("LISTED_PRODUCTS");
+/**
+ * `seedStorage` - it's a key-value data-structure that is used to store seeds created by sellers.
+ */
+export const seedStorage = new PersistentUnorderedMap<string, Seed>("LISTED_SEEDS");
 
 
+/**
+ * This class represents a seed that has been bought on the marketplace.
+ * It contains basic properties that are needed in the purchase of a seed.
+ */
 @nearBindgen
-export class PurchasedProduct {
+export class PurchasedSeed {
     id: string;
     name: string;
     description: string;
@@ -41,20 +55,23 @@ export class PurchasedProduct {
     to : string;
     datePurchased : u64;
 
-    public static fromPayload(payload: PurchasedProduct): PurchasedProduct {
-        const purchasedProduct = new PurchasedProduct();
-        purchasedProduct.id = payload.id;
-        purchasedProduct.name = payload.name;
-        purchasedProduct.description = payload.description;
-        purchasedProduct.image = payload.image;
-        purchasedProduct.location = payload.location;
-        purchasedProduct.price = payload.price;
-        purchasedProduct.from = payload.from;
-        purchasedProduct.to = context.sender;
-        purchasedProduct.datePurchased = context.blockTimestamp;
-        return purchasedProduct;
+    public static fromPayload(payload: PurchasedSeed): PurchasedSeed {
+        const purchasedSeed = new PurchasedSeed();
+        purchasedSeed.id = payload.id;
+        purchasedSeed.name = payload.name;
+        purchasedSeed.description = payload.description;
+        purchasedSeed.image = payload.image;
+        purchasedSeed.location = payload.location;
+        purchasedSeed.price = payload.price;
+        purchasedSeed.from = payload.from;
+        purchasedSeed.to = context.sender;
+        purchasedSeed.datePurchased = context.blockTimestamp;
+        return purchasedSeed;
     }
     
 }
 
-export const purchasedProductsStorage = new PersistentUnorderedMap<string, PurchasedProduct>("PURCHASED_PRODUCTS");
+/**
+ * `purchasedSeedStorage` - it's a key-value data-structure that is used to store seeds purchased already.
+ */
+export const purchasedSeedStorage = new PersistentUnorderedMap<string, PurchasedSeed>("PURCHASED_SEED");

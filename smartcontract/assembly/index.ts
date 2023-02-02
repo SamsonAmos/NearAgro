@@ -1,81 +1,102 @@
-import { Product, productsStorage, purchasedProductsStorage, PurchasedProduct } from './model';
+import { Seed, seedStorage, purchasedSeedStorage, PurchasedSeed } from './model';
 import { context, ContractPromiseBatch, u128 } from "near-sdk-as";
 
+/**
+ * 
+ * A function that is used to purchase a seed based on it's id and also stores
+ *  that seed on the purchasedSeedStorage along with it timestamp.
+ * 
+ */
 
-export function buyProduct(productId: string, name : string, description : string, location : string, from : string, image : string, pId : string): void {
-    const product = getProduct(productId);
-    if (product == null) {
-        throw new Error("product not found");
+export function buySeed(seedId: string, name : string, description : string, location : string, from : string, image : string, pId : string): void {
+    const seed = getSeed(seedId);
+    if (seed == null) {
+        throw new Error("seed not found");
     }
-    if (product.price.toString() != context.attachedDeposit.toString()) {
-        throw new Error("attached deposit should be greater than the product's price");
+    if (seed.price.toString() != context.attachedDeposit.toString()) {
+        throw new Error("attached deposit should be greater than the seed's price");
     }
    
-    ContractPromiseBatch.create(product.owner).transfer(context.attachedDeposit);
-    product.incrementSoldAmount();
-    productsStorage.set(product.id, product);
+    ContractPromiseBatch.create(seed.owner).transfer(context.attachedDeposit);
+    seed.incrementSoldAmount();
+    seedStorage.set(seed.id, seed);
 
 
-    const p: PurchasedProduct = {
+    const p: PurchasedSeed = {
         id : pId,
         name: name,
         description: description,
         image : image,
         location: location,
-        price: product.price,
+        price: seed.price,
         from : from
     };
-    purchasedProductsStorage.set(pId, PurchasedProduct.fromPayload(p));
+    purchasedSeedStorage.set(pId, PurchasedSeed.fromPayload(p));
 }
 
 /**
  * 
- * @param product - a product to be added to the blockchain
+ * @param seed - a seed to be added to the blockchain
  */
-export function setProduct(product: Product): void {
-    let storedProduct = productsStorage.get(product.id);
-    if (storedProduct !== null) {
-        throw new Error(`a product with id=${product.id} already exists`);
+
+export function setSeed(seed: Seed): void {
+    let storedSeed = seedStorage.get(seed.id);
+    if (storedSeed !== null) {
+        throw new Error(`a seed with id=${seed.id} already exists`);
     }
-    productsStorage.set(product.id, Product.fromPayload(product));
+    seedStorage.set(seed.id, Seed.fromPayload(seed));
 }
 
 /**
  * 
- * A function that returns a single product for given owner and product id
+ * A function that returns a single seed based on it's id
  * 
- * @param id - an identifier of a product to be returned
- * @returns a product for a given @param id
+ * @param id - an identifier of a seed to be returned
+ * @returns a seed for a given @param id
  */
-export function getProduct(id: string): Product | null {
-    return productsStorage.get(id);
+export function getSeed(id: string): Seed | null {
+    return seedStorage.get(id);
 }
 
 /**
  * 
- * A function that returns an array of products for all accounts
+ * A function that returns an array of seeds for all accounts
  * 
- * @returns an array of objects that represent a product
+ * @returns an array of objects that represent a seed
  */
-export function getProducts(): Array<Product> {
-    return productsStorage.values();
-}
-
-export function getPurchasedProducts(): Array<PurchasedProduct> {
-    return purchasedProductsStorage.values();
+export function getSeeds(): Array<Seed> {
+    return seedStorage.values();
 }
 
 
-export function deleteProduct(id : string) : void {
-    let storedProduct = productsStorage.get(id);
+
+/**
+ * 
+ * A function that deletes a single seed based on a given id and owner 
+ *  information on the frontend
+ *
+ * @param id - an identifier of a given seed to be deleted
+ * @delete a seed for a given @param id and owner information
+ */
+export function deleteSeed(id : string) : void {
+    let storedSeed = seedStorage.get(id);
     
-    if (storedProduct == null) throw new Error("drug not found");
+    if (storedSeed == null) throw new Error("seed not found");
         else {
-            productsStorage.delete(storedProduct.id);
+            seedStorage.delete(storedSeed.id);
         }
 }
 
- export function  updateProduct(
+
+
+/**
+ * 
+ * A function that updates a single seed based on a given id and owner information on the frontend
+ * 
+ * @param _id, _name, _description, _image, _location, _price - are parameters needed to update a seed
+ *
+ */
+ export function  updateSeed(
     id: string, 
     _name: string,
     _description: string,
@@ -83,17 +104,27 @@ export function deleteProduct(id : string) : void {
     _location: string,
     _price: u128
     ): void {
-        const product = productsStorage.get(id);
+        const seed = seedStorage.get(id);
 
-        if (product == null) throw new Error("product not found");
+        if (seed == null) throw new Error("seed not found");
         else {
-            product.name = _name;
-            product.description = _description;
-            product.image = _image;
-            product.location = _location;
-            product.price = _price;
+            seed.name = _name;
+            seed.description = _description;
+            seed.image = _image;
+            seed.location = _location;
+            seed.price = _price;
 
-            productsStorage.set(product.id, product);
+            seedStorage.set(seed.id, seed);
         }
     }
 
+
+/**
+ * 
+ * A function that returns an purchased seeds
+ * 
+ * @returns an array of objects that represent purchased seeds
+ */
+export function getPurchasedSeeds(): Array<PurchasedSeed> {
+    return purchasedSeedStorage.values();
+}

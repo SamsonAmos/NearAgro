@@ -6,8 +6,8 @@ import { toast } from "react-toastify";
 import Loader from "../utils/Loader";
 import { NotificationSuccess, NotificationError } from "../utils/Notifications";
 import {
-   getProducts as getProductList, deleteProduct as deleteProductById,
-    getProduct as getProductById, updateProduct as updateProductById
+   getSeeds as getSeedList, deleteSeed as deleteSeedById,
+    getSeed as getSeedById, updateSeed as updateSeedById
 } from "../../utils/marketplace";
 
 
@@ -30,7 +30,7 @@ const getProducts = useCallback(async () => {
   let _products = []
     try {
       setLoading(true);
-      _products =  await getProductList()
+      _products =  await getSeedList()
       setProducts(_products.filter(item => item.owner === accountId))
     } catch (error) {
       console.log({ error });
@@ -43,7 +43,7 @@ const getProducts = useCallback(async () => {
 const getProduct = useCallback(async (id) => {
     try {
       // setLoading(true);
-      let product = await getProductById(id)
+      let product = await getSeedById(id)
       setName(product.name)
       setImage(product.image)
       setDescription(product.description)
@@ -62,7 +62,7 @@ const getProduct = useCallback(async (id) => {
   const deleteProduct = async (id) => {
   try{
     toast(<NotificationSuccess text="deleting product please wait." />);
-    deleteProductById(id)
+    deleteSeedById(id)
     .then((resp) => {
       getProducts()
       toast(<NotificationSuccess text="product deleted successfully." />);
@@ -79,7 +79,7 @@ const getProduct = useCallback(async (id) => {
 const updateProduct = async (id) => {
     try {
       toast(<NotificationSuccess text="updating product please wait." />);
-      updateProductById(id, name, description, image, location, price).then((resp) => {
+      updateSeedById(id, name, description, image, location, price).then((resp) => {
         getProducts();
         handleClose();
       });

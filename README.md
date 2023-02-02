@@ -1,3 +1,13 @@
+# NearAgro
+
+## Description
+A decentralized farmer marketplace built on the NEAR protocol, where a farmer can both buy and sell plant seeds on the NEAR blockchain, view more information about the product, create their own product, view products created, update and delete those products and also get the list of products they purchased along with their information.
+
+## Live Demo
+[AgroCelo](https://samsonamos.github.io/AgroCelo1/)
+
+
+
 The app is hosted here: [https://chigozie0706.github.io/near-market-place/](https://chigozie0706.github.io/near-market-place/)
 
 # Getting Started with Create React App

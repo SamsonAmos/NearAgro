@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { NotificationSuccess, NotificationError } from "../utils/Notifications";
 
 import {
-  getProduct as getProductById, buyProduct
+  getSeed as getSeedById, buySeed
 } from "../../utils/marketplace";
 
 
@@ -22,7 +22,7 @@ const navigate = useNavigate()
 const getProduct = useCallback(async () => {
     try {
       setLoading(true);
-      setProducts(await getProductById(id));
+      setProducts(await getSeedById(id));
     } catch (error) {
       console.log({ error });
     } finally {
@@ -33,11 +33,11 @@ const getProduct = useCallback(async () => {
 const buy = async (id, price, name, description, location, from, image) => {
     toast(<NotificationSuccess text="Processing your request..." />);
     try {
-      await buyProduct({
+      await buySeed({
         id,
         price, name, description, location, from, image
       }).then((resp) => {
-       getProduct(id)
+       getSeedById(id)
        toast(<NotificationSuccess text="Product bought successfully" />);
      })
       

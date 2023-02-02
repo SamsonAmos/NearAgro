@@ -18,9 +18,9 @@ export async function initializeContract() {
     nearEnv.contractName,
     {
       // List here all view methods
-      viewMethods: ["getProduct", "getProducts"],
+      viewMethods: ["getSeed", "getSeeds", "getPurchasedSeeds"],
       // List call methods that change state
-      changeMethods: ["buyProduct", "setProduct", "deleteProduct", "updateProduct"],
+      changeMethods: ["buySeed", "setSeed", "deleteSeed", "updateSeed"],
     }
   );
 }
