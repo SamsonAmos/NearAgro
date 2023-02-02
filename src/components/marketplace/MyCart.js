@@ -1,10 +1,8 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Card, Button, Col, Badge, Row,  Form, FloatingLabel, Modal, Container } from "react-bootstrap";
+import { Card, Button, Col,  Row, Container } from "react-bootstrap";
 import { utils } from "near-api-js";
 import {useNavigate} from "react-router-dom"
-import { toast } from "react-toastify";
 import Loader from "../utils/Loader";
-import { NotificationSuccess, NotificationError } from "../utils/Notifications";
 import {getPurchasedSeeds} from "../../utils/marketplace";
 
 
