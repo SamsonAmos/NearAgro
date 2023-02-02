@@ -1,0 +1,14 @@
+{
+  "name": "smartcontract",
+  "version": "1.0.0",
+  "description": "Install the next tools: * `node` * `yarn` * `near-cli`",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "near-sdk-as": "^3.2.3"
+  }
+}
