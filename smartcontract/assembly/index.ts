@@ -3,33 +3,37 @@ import { context, ContractPromiseBatch, u128 } from "near-sdk-as";
 
 /**
  * 
- * A function that is used to purchase a seed based on it's id and also stores
- *  that seed on the purchasedSeedStorage along with it timestamp.
+ * A function that is used to purchase a seed based on its id and also to store
+ *  that seed on the purchasedSeedStorage.
  * 
  */
 
-export function buySeed(seedId: string, name : string, description : string, location : string, from : string, image : string, pId : string): void {
+export function buySeed(seedId: string, pId : string): void {
     const seed = getSeed(seedId);
+    const purchasedSeed = purchasedSeedStorage.get(pId);
     if (seed == null) {
         throw new Error("seed not found");
+    }
+    if(purchasedSeed !== null){
+        throw new Error(`A purchased seed with the id of ${pId} already exists`);
     }
     if (seed.price.toString() != context.attachedDeposit.toString()) {
         throw new Error("attached deposit should be greater than the seed's price");
     }
-   
+    
     ContractPromiseBatch.create(seed.owner).transfer(context.attachedDeposit);
     seed.incrementSoldAmount();
     seedStorage.set(seed.id, seed);
 
-
+    
     const p: PurchasedSeed = {
         id : pId,
-        name: name,
-        description: description,
-        image : image,
-        location: location,
+        name: seed.name,
+        description: seed.description,
+        image : seed.image,
+        location: seed.location,
         price: seed.price,
-        from : from
+        from : context.sender.toString()
     };
     purchasedSeedStorage.set(pId, PurchasedSeed.fromPayload(p));
 }
@@ -44,12 +48,16 @@ export function setSeed(seed: Seed): void {
     if (storedSeed !== null) {
         throw new Error(`a seed with id=${seed.id} already exists`);
     }
+    assert(seed.description.length > 0, "Empty description");
+    assert(seed.location.length > 0, "Invalid location");
+    assert(seed.image.length > 0, "Invalid image url");
+    assert(seed.name.length > 0, "Empty name");
     seedStorage.set(seed.id, Seed.fromPayload(seed));
 }
 
 /**
  * 
- * A function that returns a single seed based on it's id
+ * A function that returns a single seed based on its id
  * 
  * @param id - an identifier of a seed to be returned
  * @returns a seed for a given @param id
@@ -72,8 +80,7 @@ export function getSeeds(): Array<Seed> {
 
 /**
  * 
- * A function that deletes a single seed based on a given id and owner 
- *  information on the frontend
+ * A function that deletes a single seed based on a given id
  *
  * @param id - an identifier of a given seed to be deleted
  * @delete a seed for a given @param id and owner information
@@ -83,6 +90,7 @@ export function deleteSeed(id : string) : void {
     
     if (storedSeed == null) throw new Error("seed not found");
         else {
+            assert(storedSeed.owner.toString() === context.sender.toString(), "Unauthorized sender");
             seedStorage.delete(storedSeed.id);
         }
 }
@@ -91,7 +99,7 @@ export function deleteSeed(id : string) : void {
 
 /**
  * 
- * A function that updates a single seed based on a given id and owner information on the frontend
+ * A function that updates a single seed based on a given id
  * 
  * @param _id, _name, _description, _image, _location, _price - are parameters needed to update a seed
  *
@@ -108,6 +116,11 @@ export function deleteSeed(id : string) : void {
 
         if (seed == null) throw new Error("seed not found");
         else {
+            assert(seed.owner.toString() === context.sender.toString(), "Unauthorized sender");
+            assert(_description.length > 0, "Empty description");
+            assert(_location.length > 0, "Invalid location");
+            assert(_image.length > 0, "Invalid image url");
+            assert(_name.length > 0, "Empty name");
             seed.name = _name;
             seed.description = _description;
             seed.image = _image;
