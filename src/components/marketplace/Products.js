@@ -11,11 +11,11 @@ import {
   createSeed,
 } from "../../utils/marketplace";
 
-const Products = () => {
+  const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // function to get the list of products
+  // function to get the list of all seeds listed 
   const getProducts = useCallback(async () => {
     try {
       setLoading(true);
@@ -27,6 +27,8 @@ const Products = () => {
     }
   });
 
+
+// function used to create or list a new seed
   const addProduct = async (data) => {
     try {
       setLoading(true);
@@ -41,6 +43,7 @@ const Products = () => {
       setLoading(false);
     }
   };
+  
 
   //  function to initiate transaction
   const buy = async (id, price) => {

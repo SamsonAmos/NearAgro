@@ -19,6 +19,8 @@ const [loading, setLoading] = useState(false);
 const id = params.id
 const navigate = useNavigate()
 
+
+// function used to get seed by its id
 const getProduct = useCallback(async () => {
     try {
       setLoading(true);
@@ -30,6 +32,8 @@ const getProduct = useCallback(async () => {
     }
   }, [id]);
 
+
+// function used to purchase a seed
 const buy = async (id, price, name, description, location, from, image) => {
     toast(<NotificationSuccess text="Processing your request..." />);
     try {
@@ -56,8 +60,6 @@ useEffect(() => {
     getProduct();
   }, [getProduct]);
 
-console.log(id)
-console.log(products)
  return (
  	<>
  	<Row className="mt-3">

@@ -26,6 +26,9 @@ const isFormFilled = () => name && image && description && location && price;
 const handleClose = () => setShow(false);
 const handleShow = () => setShow(true); 
   
+
+
+// function used to get all seed listed
 const getProducts = useCallback(async () => {
   let _products = []
     try {
@@ -40,9 +43,9 @@ const getProducts = useCallback(async () => {
   }, [accountId]);
 
 
+// function used to get the details of a particular seed
 const getProduct = useCallback(async (id) => {
     try {
-      // setLoading(true);
       let product = await getSeedById(id)
       setName(product.name)
       setImage(product.image)
@@ -59,6 +62,7 @@ const getProduct = useCallback(async (id) => {
   }, []);
 
 
+// function used to delete a seed
   const deleteProduct = async (id) => {
   try{
     toast(<NotificationSuccess text="deleting product please wait." />);
@@ -76,6 +80,7 @@ const getProduct = useCallback(async (id) => {
 }
 
 
+// function used to update a seed by its id
 const updateProduct = async (id) => {
     try {
       toast(<NotificationSuccess text="updating product please wait." />);

@@ -8,10 +8,13 @@ import {getPurchasedSeeds} from "../../utils/marketplace";
 
 
 const MyCart = ({accountId}) => {
+
 const navigate = useNavigate()
 const [products, setProducts] = useState([]);
 const [loading, setLoading] = useState(false);
   
+
+// function used to get all seeds listed 
 const getProducts = useCallback(async () => {
   let _products = []
     try {
@@ -24,8 +27,6 @@ const getProducts = useCallback(async () => {
       setLoading(false);
     }
   }, [accountId]);
-
-
 
 
 
