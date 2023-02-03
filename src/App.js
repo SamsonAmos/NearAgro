@@ -9,7 +9,7 @@ import MyProducts from "./components/marketplace/MyProducts";
 import MyCart from "./components/marketplace/MyCart";
 import Cover from "./components/utils/Cover";
 import coverImg from "./assets/img/images.jpeg";
-import { Routes, Route, useNavigate  } from "react-router-dom";
+import { Routes, Route, useNavigate, Navigate  } from "react-router-dom";
 import "./App.css";
 
 const App = function AppWrapper() {
@@ -24,7 +24,7 @@ const App = function AppWrapper() {
     }
   });
 
-  console.log("account", account.accountId)
+ 
 
   useEffect(() => {
     getBalance();
@@ -62,7 +62,11 @@ const App = function AppWrapper() {
           
 
 <Routes>
- <Route path="/"  element={<Products />} /> 
+<Route
+        path="/"
+        element={<Navigate replace to="/NearAgro" />}
+      />
+ <Route path="/NearAgro"  element={<Products />}  /> 
  <Route path="/view_product_by_id/:id"  element={<ViewProductById />} /> 
  <Route path="/view_my_products"  element={<MyProducts accountId = {account.accountId}/>} /> 
  <Route path="/view_my_cart"  element={<MyCart accountId = {account.accountId}/>} /> 

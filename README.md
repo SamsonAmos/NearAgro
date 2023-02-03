@@ -1,6 +1,5 @@
 # NearAgro
 
-## Description
 A decentralized farmer marketplace built on the NEAR protocol, where a farmer can both buy and sell plant seeds on the NEAR blockchain, view more information about the seeds, create their own seeds, view seeds created, update and delete those seeds created and also get the list of seeds they purchased along with their information.
 
 
