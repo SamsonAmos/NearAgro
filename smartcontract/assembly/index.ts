@@ -44,6 +44,12 @@ export function setSeed(seed: Seed): void {
     if (storedSeed !== null) {
         throw new Error(`a seed with id=${seed.id} already exists`);
     }
+
+    assert(seed.description.length > 0, "Empty description");
+    assert(seed.location.length > 0, "Invalid location");
+    assert(seed.image.length > 0, "Invalid image url");
+    assert(seed.name.length > 0, "Empty name");
+
     seedStorage.set(seed.id, Seed.fromPayload(seed));
 }
 
@@ -83,6 +89,7 @@ export function deleteSeed(id : string) : void {
     
     if (storedSeed == null) throw new Error("seed not found");
         else {
+            assert(storedSeed.owner.toString() === context.sender.toString(), "Unauthorized sender");
             seedStorage.delete(storedSeed.id);
         }
 }
@@ -108,6 +115,13 @@ export function deleteSeed(id : string) : void {
 
         if (seed == null) throw new Error("seed not found");
         else {
+
+            assert(seed.owner.toString() === context.sender.toString(), "Unauthorized sender");
+            assert(_description.length > 0, "Empty description");
+            assert(_location.length > 0, "Invalid location");
+            assert(_image.length > 0, "Invalid image url");
+            assert(_name.length > 0, "Empty name");
+
             seed.name = _name;
             seed.description = _description;
             seed.image = _image;
