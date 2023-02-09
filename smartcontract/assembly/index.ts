@@ -89,7 +89,6 @@ export function deleteSeed(id : string) : void {
     
     if (storedSeed == null) throw new Error("seed not found");
         else {
-            assert(storedSeed.owner.toString() === context.sender.toString(), "Unauthorized sender");
             seedStorage.delete(storedSeed.id);
         }
 }
@@ -116,7 +115,6 @@ export function deleteSeed(id : string) : void {
         if (seed == null) throw new Error("seed not found");
         else {
 
-            assert(seed.owner.toString() === context.sender.toString(), "Unauthorized sender");
             assert(_description.length > 0, "Empty description");
             assert(_location.length > 0, "Invalid location");
             assert(_image.length > 0, "Invalid image url");
