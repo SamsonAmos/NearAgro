@@ -8,7 +8,7 @@ const AddProduct = ({ save }) => {
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
   const [price, setPrice] = useState(0);
-  const isFormFilled = () => name && image && description && location && price;
+  const isFormFilled = () => name && image  && location && price;
 
   const [show, setShow] = useState(false);
 
